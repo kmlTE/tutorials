@@ -1,0 +1,32 @@
+#!/usr/bin/env gnuplot
+
+set terminal pdf color
+set output '$OUTPUT_FILE'
+set datafile separator ","
+
+set xlabel "Message size (bytes)"
+set xrange [0:16]
+
+set ylabel '$YLABEL' offset 4,0,0
+set yrange [0:]
+
+set format y "%.1s*10^{%T}"
+set ytics add ('0' 0)
+
+#set style data histogram
+#set style histogram errorbars gap 1 lw 1
+set style histogram clustered gap 5
+
+set tics font ", 7"
+
+set key inside horizontal top left
+
+set boxwidth 2
+set style fill solid 0.8 border rgb "black"
+
+set grid
+
+plot \
+    '$DATA_DEF' using 5:xtic(2) title "NO-ALG" with histogram lt rgb "blue", \
+    '$DATA_DRR' using 5:xtic(2) title "DRR" with histogram lt rgb "green", \
+    '$DATA_STRICT' using 5:xtic(2) title "STRICT" with histogram lt rgb "red";

@@ -1,0 +1,111 @@
+{
+  "target": "bmv2",
+  "p4info": "build/basic.p4info",
+  "bmv2_json": "build/basic.json",
+  "table_entries": [
+    {
+      "table": "MyIngress.ipv4_lpm",
+      "default_action": true,
+      "action_name": "MyIngress.drop",
+      "action_params": { }
+    },
+    {
+      "table": "MyIngress.ipv4_lpm",
+      "match": {
+        "hdr.ipv4.dstAddr": ["10.0.3.7", 32]
+      },
+      "action_name": "MyIngress.ipv4_forward",
+      "action_params": {
+        "dstAddr": "00:00:00:00:03:07",
+        "port": 1
+      }
+    },
+    {
+      "table": "MyIngress.ipv4_lpm",
+      "match": {
+        "hdr.ipv4.dstAddr": ["10.0.3.8", 32]
+      },
+      "action_name": "MyIngress.ipv4_forward",
+      "action_params": {
+        "dstAddr": "00:00:00:00:03:08",
+        "port": 2
+      }
+    },
+    {
+      "table": "MyIngress.ipv4_lpm",
+      "match": {
+        "hdr.ipv4.dstAddr": ["10.0.3.9", 32]
+      },
+      "action_name": "MyIngress.ipv4_forward",
+      "action_params": {
+        "dstAddr": "00:00:00:00:03:09",
+        "port": 3
+      }
+    },
+    {
+      "table": "MyIngress.ipv4_lpm",
+      "match": {
+        "hdr.ipv4.dstAddr": ["10.0.0.0", 16]
+      },
+      "action_name": "MyIngress.ipv4_forward",
+      "action_params": {
+        "dstAddr": "00:00:00:00:03:00",
+        "port": 4
+      }
+    },
+    {
+      "table": "MyIngress.src_ip_prio",
+      "default_action": true,
+      "action_name": "MyIngress.NoActions",
+      "action_params": { }
+    },
+    {
+      "table": "MyIngress.src_ip_prio",
+      "match": {
+        "hdr.ipv4.srcAddr": ["10.0.3.7", 32]
+      },
+      "action_name": "MyIngress.set_priority",
+      "action_params": {
+        "prio": $HP_QUEUE,
+        "queue_rate": $HP_RATE,
+        "queue_quantum": 7000
+      }
+    },
+    {
+      "table": "MyIngress.src_ip_prio",
+      "match": {
+        "hdr.ipv4.srcAddr": ["10.0.3.8", 32]
+      },
+      "action_name": "MyIngress.set_priority",
+      "action_params": {
+        "prio": 5,
+        "queue_rate": $LP_RATE,
+        "queue_quantum": 7000
+      }
+    },
+    {
+      "table": "MyIngress.src_ip_prio",
+      "match": {
+        "hdr.ipv4.srcAddr": ["10.0.3.9", 32]
+      },
+      "action_name": "MyIngress.set_priority",
+      "action_params": {
+        "prio": 4,
+        "queue_rate": $LP_RATE,
+        "queue_quantum": 7000
+      }
+    },
+    {
+      "table": "MyIngress.src_ip_prio",
+      "match": {
+        "hdr.ipv4.srcAddr": ["10.0.0.0", 8]
+      },
+      "action_name": "MyIngress.set_priority",
+      "action_params": {
+        "prio": 3,
+        "queue_rate": $LINK_RATE,
+        "queue_quantum": 7000
+      }
+    }
+  ]
+}

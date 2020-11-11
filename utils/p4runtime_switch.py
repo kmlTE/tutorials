@@ -103,6 +103,12 @@ class P4RuntimeSwitch(P4Switch):
         for port, intf in self.intfs.items():
             if not intf.IP():
                 args.extend(['-i', str(port) + "@" + intf.name])
+        
+        self.pcap_dump = False
+        self.nanomsg = False
+        self.enable_debugger = False
+        self.log_console = False
+
         if self.pcap_dump:
             args.append("--pcap %s" % self.pcap_dump)
         if self.nanomsg:
@@ -122,7 +128,9 @@ class P4RuntimeSwitch(P4Switch):
         if self.grpc_port:
             args.append("-- --grpc-server-addr 0.0.0.0:" + str(self.grpc_port))
         cmd = ' '.join(args)
+        #cmd = "nice -n -20 " + cmd
         info(cmd + "\n")
+        print cmd
 
 
         pid = None

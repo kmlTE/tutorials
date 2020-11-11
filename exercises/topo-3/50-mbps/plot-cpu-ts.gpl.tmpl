@@ -1,0 +1,19 @@
+#!/usr/bin/env gnuplot
+
+set terminal pdf color
+set output '$OUTPUT_FILE'
+
+set xlabel "Time (sec)"
+
+set autoscale
+
+set format y "%.0s"
+
+set xtics 30
+
+unset key
+
+set grid
+
+set ylabel '$YLABEL'
+plot '$DATA' with lines

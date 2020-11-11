@@ -1,0 +1,21 @@
+h4 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h4-iperf.csv &
+h5 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h5-iperf.csv &
+h6 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h6-iperf.csv &
+
+h1 sleep ${IPERF_INTERVAL} && iperf -c h4 -t ${IPERF_INTERVAL} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h1-iperf.csv &
+h2 iperf -c h5 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h2-iperf.csv &
+h3 iperf -c h6 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h3-iperf.csv &
+
+h1 ./dump_cpu_ps.sh | tee ${PREFIX}/cpu-util.csv &
+
+sh sleep ${IPERF_INTERVAL}
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9090" "hp_inject_enable_10"
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9091" "hp_inject_enable_10"
+
+sh sleep ${IPERF_INTERVAL}
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9090" "hp_inject_disable_10"
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9091" "hp_inject_disable_10"
+
+sh sleep $((${IPERF_INTERVAL} + 2))
+
+h1 kill %%

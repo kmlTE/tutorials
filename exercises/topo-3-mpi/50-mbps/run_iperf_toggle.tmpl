@@ -1,0 +1,34 @@
+h7 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h7-iperf.csv &
+h8 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h8-iperf.csv &
+h9 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h9-iperf.csv &
+
+h10 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h10-iperf.csv &
+h11 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h11-iperf.csv &
+h12 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h12-iperf.csv &
+
+
+h1 iperf -c h7 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h1-iperf.csv &
+h2 iperf -c h8 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h2-iperf.csv &
+h3 iperf -c h9 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h3-iperf.csv &
+
+h4 iperf -c h10 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h4-iperf.csv &
+h5 iperf -c h11 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h5-iperf.csv &
+h6 iperf -c h12 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h6-iperf.csv &
+
+h1 ./dump_cpu_ps.sh | tee ${PREFIX}/cpu-util.csv &
+
+sh sleep ${IPERF_INTERVAL}
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9090" "prio_enable_50"
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9091" "prio_enable_50"
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9092" "prio_enable_50"
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9093" "prio_enable_50"
+
+sh sleep ${IPERF_INTERVAL}
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9090" "prio_disable_50"
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9091" "prio_disable_50"
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9092" "prio_disable_50"
+sh ~/p4/p4-install/behavioral-model/targets/${TARGET}/sswitch_onecmd "" "9093" "prio_disable_50"
+
+sh sleep $((${IPERF_INTERVAL} + 2))
+
+h1 kill %%

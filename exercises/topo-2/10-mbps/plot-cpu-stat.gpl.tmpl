@@ -1,0 +1,27 @@
+#!/usr/bin/env gnuplot
+
+data_file=system("echo $DATA_FILE")
+output_file=system("echo $OUTPUT_FILE")
+
+set terminal pdf color
+set output output_file
+set datafile separator ","
+
+set xlabel "Bandwidth (Mbps)"
+set xrange [0:21]
+
+set yrange [0:300]
+
+set tics font ", 7"
+
+set key inside top left
+
+set boxwidth 0.2
+set style fill solid 0.2 border rgb "blue"
+
+set title "CPU Utilization (%) vs bandwidth"
+set grid
+
+plot \
+	data_file using 1:5:6:xtic(2) with boxerrorbars lc rgb "blue" title "average (stddev)", \
+	'' using 1:4:xtic(2) with points pointtype 11 lc rgb "red" ps 0.7 title "max";

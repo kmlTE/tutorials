@@ -1,0 +1,22 @@
+h1 /usr/sbin/sshd -D &
+h1 export SSH_ASKPASS=~/p4/mpi/mpitutorial/tutorials/ping-pong-lat/code/pass
+h1 export MPI_HOSTS=~/p4/mpi/mpitutorial/tutorials/ping-pong-lat/code/hosts-topo-2
+
+h4 /usr/sbin/sshd -D &
+h4 export SSH_ASKPASS=~/p4/mpi/mpitutorial/tutorials/ping-pong-lat/code/pass
+h4 export MPI_HOSTS=~/p4/mpi/mpitutorial/tutorials/ping-pong-lat/code/hosts-topo-2
+
+
+h1 ssh-keyscan -H host-4 >> ~/.ssh/known_hosts &
+h4 ssh-keyscan -H host-1 >> ~/.ssh/known_hosts &
+
+
+h5 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h5-iperf.csv &
+h6 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h6-iperf.csv &
+
+h2 iperf -c h5 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h2-iperf.csv &
+h3 iperf -c h6 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h3-iperf.csv &
+
+h1 ./dump_cpu_ps.sh | tee ${PREFIX}/cpu-util.csv &
+
+h1 cd ~/p4/mpi/mpitutorial/tutorials/ && ./run.py ping_pong_lat | tee ${PREFIX}/h1-mpi.csv && kill %%

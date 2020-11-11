@@ -1,0 +1,34 @@
+{
+    "hosts": [
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "h7",
+        "h8",
+        "h9",
+        "h10",
+        "h11",
+        "h12"
+    ],
+    "switches": {
+        "s1": { "runtime_json" : "s1-runtime.json" },
+        "s2": { "runtime_json" : "s2-runtime.json" },
+        "s3": { "runtime_json" : "s3-runtime.json" },
+        "s4": { "runtime_json" : "s4-runtime.json" },
+        "s5": { "runtime_json" : "s5-runtime.json" },
+        "s6": { "runtime_json" : "s6-runtime.json" },
+        "s7": { "runtime_json" : "s7-runtime.json" }
+    },
+    "links": [
+        ["h1", "s1", "0", $LINK_CAP_MB], ["h2", "s1", "0", $LINK_CAP_MB], ["h3", "s1", "0", $LINK_CAP_MB], 
+        ["h4", "s2", "0", $LINK_CAP_MB], ["h5", "s2", "0", $LINK_CAP_MB], ["h6", "s2", "0", $LINK_CAP_MB], 
+        ["h7", "s3", "0", $LINK_CAP_MB], ["h8", "s3", "0", $LINK_CAP_MB], ["h9", "s3", "0", $LINK_CAP_MB],
+        ["h10", "s4", "0", $LINK_CAP_MB], ["h11", "s4", "0", $LINK_CAP_MB], ["h12", "s4", "0", $LINK_CAP_MB],
+        ["s1", "s5", "0", $LINK_CAP_MB], ["s2", "s5", "0", $LINK_CAP_MB],
+        ["s3", "s6", "0", $LINK_CAP_MB], ["s4", "s6", "0", $LINK_CAP_MB],
+        ["s5", "s7", "0", $AGR_LINK_CAP_MB], ["s6", "s7", "0", $AGR_LINK_CAP_MB]
+    ]
+}

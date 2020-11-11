@@ -1,0 +1,6 @@
+h4 iperf -s -i 1 -y C -e ${UDP_FLAG} > ${PREFIX}/h4-iperf.csv &
+h1 iperf -c h4 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h1-iperf.csv &
+h2 iperf -c h4 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h2-iperf.csv &
+h3 iperf -c h4 -t ${IPERF_TIME} -i 1 -y C -e ${UDP_ARGS} > ${PREFIX}/h3-iperf.csv &
+h1 ./dump_cpu_ps.sh | tee ${PREFIX}/cpu-util.csv &
+h1 sleep $((${IPERF_TIME} + 2)) && kill %%

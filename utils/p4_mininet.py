@@ -123,6 +123,12 @@ class P4Switch(Switch):
         for port, intf in self.intfs.items():
             if not intf.IP():
                 args.extend(['-i', str(port) + "@" + intf.name])
+
+        # self.pcap_dump = False
+        # self.nanomsg = False
+        # self.enable_debugger = False
+        # self.log_console = False
+
         if self.pcap_dump:
             args.append("--pcap %s" % self.pcap_dump)
         if self.thrift_port:

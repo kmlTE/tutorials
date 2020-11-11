@@ -333,9 +333,24 @@ class ExerciseRunner:
             h.defaultIntf().rename('%s-eth0' % host_name)
             # static arp entries and default routes
             h.cmd('arp -i %s -s %s %s' % (h_iface.name, sw_ip, sw_iface.mac))
+
+            for _host_name in self.topo.hosts():
+                _h = self.net.get(_host_name)
+                _h_iface = _h.intfs.values()[0]
+                h.cmd('arp -i %s -s %s %s' % (h_iface.name, _h.IP(), _h.MAC()))
+
             h.cmd('ethtool --offload %s rx off tx off' % h_iface.name)
             h.cmd('ip route add %s dev %s' % (sw_ip, h_iface.name))
             h.setDefaultRoute("via %s" % sw_ip)
+
+            for off in ["rx", "tx", "sg", "tso", "ufo", "gso", "gro", "lro", "rxvlan", "txvlan", "rxhash"]:
+                cmd = "/sbin/ethtool --offload %s %s off" % (h_iface.name, off)
+                h.cmd(cmd)
+
+            # enable sshd
+            # h.cmd('/usr/sbin/sshd -D &')
+            # h.cmd('export SSH_ASKPASS=~/p4/mpi/mpitutorial/tutorials/ping-pong-lat/code/pass')
+            # h.cmd('export MPI_HOSTS=~/p4/mpi/mpitutorial/tutorials/ping-pong-lat/code/hosts-topo-1')
 
 
     def do_net_cli(self):
@@ -377,7 +392,9 @@ class ExerciseRunner:
             print(' for example run:  cat %s/s1-p4runtime-requests.txt' % self.log_dir)
             print('')
 
-        CLI(self.net)
+        script = os.getenv("HOME") + "/p4/p4tutorials-eval-with-inject/exercises/run_iperf"
+        CLI(self.net, script=script)
+        #CLI(self.net)
 
 
 def get_args():
